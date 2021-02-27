@@ -1,11 +1,11 @@
 import discord
-from discord.ext import commands
 import os
 from dotenv import load_dotenv
 import json
 
 client = discord.Client()
 
+commands = {}
 people = {}
 channels = {}
 
@@ -150,7 +150,7 @@ async def save(message):
 	f.close()
 	await message.channel.send("Saved all comands")
 
-async def open(message = None):
+async def restore(message = None):
 	f = open("commands.txt", 'r')
 	commands = json.loads(f.read())
 	f.close()
@@ -165,6 +165,7 @@ async def open(message = None):
 
 @client.event
 async def on_ready():
+	await restore()
 	print('We have logged in as {0.user}'.format(client))
 
 @client.event
@@ -185,15 +186,6 @@ async def on_message(message):
 	elif message.content.startswith('!'):
 		await check_command(message)
 
-f = open("commands.txt", 'r')
-commands = json.loads(f.read())
-f.close()
-f = open("people.txt", 'r')
-people = json.loads(f.read())
-f.close()
-f = open("channels.txt", 'r')
-channels = json.loads(f.read())
-f.close()
 
 load_dotenv()
 client.run(os.environ.get('TOKEN', None))
