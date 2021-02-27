@@ -158,7 +158,7 @@ async def open(message = None):
 	people = json.loads(f.read())
 	f.close()
 	f = open("channels.txt", 'r')
-	channel = json.loads(f.read())
+	channels = json.loads(f.read())
 	f.close()
 	if (message != None):
 		message.channel.send("Restored all changes from last save")
@@ -184,6 +184,11 @@ async def on_message(message):
 		await open(message)
 	elif message.content.startswith('!'):
 		await check_command(message)
+
+commands = {}
+people = {}
+channels = {}
+open()
 
 load_dotenv()
 client.run(os.environ.get('TOKEN', None))
