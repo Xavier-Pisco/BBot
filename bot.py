@@ -150,6 +150,18 @@ async def save(message):
 	f.close()
 	await message.channel.send("Saved all comands")
 
+async def open(message = None):
+	f = open("commands.txt", 'r')
+	commands = json.loads(f.read())
+	f.close()
+	f = open("people.txt", 'r')
+	people = json.loads(f.read())
+	f.close()
+	f = open("channels.txt", 'r')
+	channel = json.loads(f.read())
+	f.close()
+	if (message != None):
+		message.channel.send("Restored all changes from last save")
 
 @client.event
 async def on_ready():
@@ -168,18 +180,10 @@ async def on_message(message):
 		await delete(message)
 	elif message.content.startswith('!save'):
 		await save(message)
+	elif message.content.startswith('!restore'):
+		await open(message)
 	elif message.content.startswith('!'):
 		await check_command(message)
-
-f = open("commands.txt", 'r')
-commands = json.loads(f.read())
-f.close()
-f = open("people.txt", 'r')
-people = json.loads(f.read())
-f.close()
-f = open("channels.txt", 'r')
-channel = json.loads(f.read())
-f.close()
 
 load_dotenv()
 client.run(os.environ.get('TOKEN', None))
