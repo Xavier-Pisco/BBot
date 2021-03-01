@@ -1,8 +1,6 @@
 import discord
 import os
 import json
-import keep_alive
-import replit
 
 
 client = discord.Client()
@@ -198,5 +196,4 @@ f = open("channels.txt", 'r')
 channels = json.loads(f.read())
 f.close()
 
-keep_alive.keep_alive()
-client.run("Insert Token here")
+client.run("ODE1MTgxNzU3MTYyMTkyOTA2.YDorLA.KPPHg4yrZAN61B4LvSfUnbaSrzU")
