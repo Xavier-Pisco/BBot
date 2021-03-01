@@ -1,7 +1,9 @@
 import discord
 import os
-from dotenv import load_dotenv
 import json
+import keep_alive
+import replit
+
 
 client = discord.Client()
 
@@ -150,7 +152,7 @@ async def save(message):
 	f.close()
 	await message.channel.send("Saved all comands")
 
-async def restore(message = None):
+def restore(message = None):
 	f = open("commands.txt", 'r')
 	commands = json.loads(f.read())
 	f.close()
@@ -160,17 +162,16 @@ async def restore(message = None):
 	f = open("channels.txt", 'r')
 	channels = json.loads(f.read())
 	f.close()
-	if (message != None):
-		await message.channel.send("Restored all changes from last save")
 
 @client.event
 async def on_ready():
-	await restore()
+	restore()
 	print('We have logged in as {0.user}'.format(client))
 
 @client.event
 async def on_message(message):
 	if message.author == client.user:
+		message.suppressEmbeds(True)
 		return
 
 	if message.content.startswith('!add'):
@@ -182,10 +183,20 @@ async def on_message(message):
 	elif message.content.startswith('!save'):
 		await save(message)
 	elif message.content.startswith('!restore'):
-		await open(message)
+		restore(message)
+		await message.channel.send("Restored all changed from last save")
 	elif message.content.startswith('!'):
 		await check_command(message)
 
+f = open("commands.txt", 'r')
+commands = json.loads(f.read())
+f.close()
+f = open("people.txt", 'r')
+people = json.loads(f.read())
+f.close()
+f = open("channels.txt", 'r')
+channels = json.loads(f.read())
+f.close()
 
-load_dotenv()
-client.run(os.environ.get('TOKEN', None))
+keep_alive.keep_alive()
+client.run("Insert Token here")
