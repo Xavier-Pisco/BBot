@@ -152,17 +152,6 @@ async def save(message):
 	f.close()
 	await message.channel.send("Saved all comands")
 
-def restore(message = None):
-	f = open("commands.txt", 'r')
-	commands = json.loads(f.read())
-	f.close()
-	f = open("people.txt", 'r')
-	people = json.loads(f.read())
-	f.close()
-	f = open("channels.txt", 'r')
-	channels = json.loads(f.read())
-	f.close()
-
 @client.event
 async def on_ready():
 	restore()
@@ -181,9 +170,6 @@ async def on_message(message):
 		await delete(message)
 	elif message.content.startswith('!save'):
 		await save(message)
-	elif message.content.startswith('!restore'):
-		restore(message)
-		await message.channel.send("Restored all changed from last save")
 	elif message.content.startswith('!'):
 		await check_command(message)
 
