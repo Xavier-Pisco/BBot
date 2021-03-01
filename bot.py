@@ -152,9 +152,23 @@ async def save(message):
 	f.close()
 	await message.channel.send("Saved all comands")
 
+async def help(message):
+	await message.channel.send("BBot - Bacalhau's Bot")
+	await message.channel.send("")
+	await message.channel.send("Usage: !<command>")
+	await message.channel.send("Usage: !add [options] command output")
+	await message.channel.send("Usage: !change [options] command output")
+	await message.channel.send("Usage: !del command")
+	await message.channel.send("Usage: !save")
+	await message.channel.send("options: ")
+	await message.channel.send("	-m/--me: command only works with the person who created")
+	await message.channel.send("	-c/--channel: command only works with on the channel it was created")
+	await message.channel.send("")
+	await message.channel.send("")
+	await message.channel.send("If the same command exists for --me, --channel and without options the bot will choose based on this order: me > channel > general")
+
 @client.event
 async def on_ready():
-	restore()
 	print('We have logged in as {0.user}'.format(client))
 
 @client.event
@@ -170,6 +184,8 @@ async def on_message(message):
 		await delete(message)
 	elif message.content.startswith('!save'):
 		await save(message)
+	elif message.content.startswith('!help'):
+		await help(message)
 	elif message.content.startswith('!'):
 		await check_command(message)
 
