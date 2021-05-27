@@ -199,4 +199,4 @@ f = open("channels.txt", 'r')
 channels = json.loads(f.read())
 f.close()
 
-client.run("ODE1MTgxNzU3MTYyMTkyOTA2.YDorLA.xaMIFcsZh06VbK59DUthSGGrGLI")
+client.run("Insert token here")
