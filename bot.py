@@ -1,11 +1,14 @@
 import discord
 import os
 import json
+import keep_alive
+import replit
+import requests
 
 
 client = discord.Client()
 
-commands = {}
+com = {}
 people = {}
 channels = {}
 
@@ -41,8 +44,8 @@ async def add(message):
 		await message.channel.send("Usage: !add [options] <command> <output>")
 	else:
 		if (content[1][0] != '-'):
-			if not(content[1] in commands):
-				response = await add_command(content[1], content[2:], commands)
+			if not(content[1] in com):
+				response = await add_command(content[1], content[2:], com)
 				await message.channel.send("Command added successfully!\n !" + content[1] + " " + response)
 			else:
 				await message.channel.send("Command already exists!\nUse command !change instead of !add to change")
@@ -82,8 +85,8 @@ async def change(message):
 		await message.channel.send("Usage: !change <options> command output")
 	else:
 		if (content[1][0] != '-'):
-			if (content[1] in commands):
-				response = await add_command(content[1], content[2:], commands)
+			if (content[1] in com):
+				response = await add_command(content[1], content[2:], com)
 				await message.channel.send("Command changed successfully!\n !" + content[1] + " " + response)
 			else:
 				await message.channel.send("Command " + content[1]+ " doesn't exist!")
@@ -114,11 +117,11 @@ async def check_command(message):
 	recognized = await check_me_command(message, content)
 	if not(recognized):
 		recognized = await check_channel_command(message, content)
-	if (not(recognized) and content[0] in commands):
-		await message.channel.send(commands[content[0]])
+	if (not(recognized) and content[0] in com):
+		await message.channel.send(com[content[0]])
 		recognized = True
-	if not(recognized):
-		await message.channel.send("Command not recognized!")
+	#if not(recognized):
+	#	await message.channel.send("Command not recognized!")
 
 async def delete(message):
 	content = message.content.split(" ")
@@ -126,8 +129,8 @@ async def delete(message):
 		await message.channel.send("Usage: !del [options] <command>")
 	else:
 		if (content[1][0] != '-'):
-			if (content[1] in commands):
-				commands.pop(content[1])
+			if (content[1] in com):
+				com.pop(content[1])
 				await message.channel.send("Command removed successfully!\n")
 			else:
 				await message.channel.send("Command " + content[1]+ " doesn't exist!")
@@ -140,7 +143,7 @@ async def delete(message):
 
 async def save(message):
 	f = open('commands.txt', 'w')
-	f.write(json.dumps(commands))
+	f.write(json.dumps(com))
 	f.close()
 	f = open('people.txt', 'w')
 	f.write(json.dumps(people))
@@ -187,7 +190,7 @@ async def on_message(message):
 		await check_command(message)
 
 f = open("commands.txt", 'r')
-commands = json.loads(f.read())
+com = json.loads(f.read())
 f.close()
 f = open("people.txt", 'r')
 people = json.loads(f.read())
@@ -196,4 +199,4 @@ f = open("channels.txt", 'r')
 channels = json.loads(f.read())
 f.close()
 
-client.run("Insert token here")
+client.run("ODE1MTgxNzU3MTYyMTkyOTA2.YDorLA.xaMIFcsZh06VbK59DUthSGGrGLI")
